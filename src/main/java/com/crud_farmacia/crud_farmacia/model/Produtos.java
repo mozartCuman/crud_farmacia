@@ -1,5 +1,8 @@
 package com.crud_farmacia.crud_farmacia.model;
 
+import java.math.BigDecimal;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
@@ -10,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -18,17 +23,20 @@ public class Produtos {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_produto;
+	private Long id;
 	
 	@NotBlank(message = "Por favor digite o nome do produto:")
 	@Size(max = 257)
 	private String nomeProduto;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
+    @NotNull(message = "O preço é obrigatório!")
+    @Positive(message = "O preço deve ser maior do que zero!")
+    private BigDecimal preco;
 	
-	@NotBlank
-	private Float preco;
 	//TODO usar o método long ou Bigdécimal posteriormente.
 	
-	@NotBlank(message = "Digite a quantidade de Produtos:")
+	@NotNull(message = "Digite a quantidade de Produtos:")
 	private byte quantidade;
 	
 	@ManyToOne
@@ -36,12 +44,12 @@ public class Produtos {
 	@JsonIgnoreProperties("produtos")
 	private Categorias categorias;
 
-	public Long getId_produto() {
-		return id_produto;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId_produto(Long id_produto) {
-		this.id_produto = id_produto;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNomeProduto() {
@@ -52,11 +60,11 @@ public class Produtos {
 		this.nomeProduto = nomeProduto;
 	}
 
-	public Float getPreco() {
+	public BigDecimal getPreco() {
 		return preco;
 	}
 
-	public void setPreco(Float preco) {
+	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
 	}
 
@@ -66,6 +74,14 @@ public class Produtos {
 
 	public void setQuantidade(byte quantidade) {
 		this.quantidade = quantidade;
+	}
+	
+	public Categorias getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(Categorias categorias) {
+		this.categorias = categorias;
 	}
 
 }
